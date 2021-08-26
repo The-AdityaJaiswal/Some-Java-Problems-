@@ -1,0 +1,131 @@
+import java.util.*;
+
+
+class Antenna{
+	int antennaid;
+	String antennaName;
+	String projectLead;
+	double antennaVSWR;
+	public Antenna(int antennaid, String antennaName, String projectName, double antennaVSWR) {
+		this.antennaid = antennaid;
+		this.antennaName = antennaName;
+		this.projectLead = projectName;
+		this.antennaVSWR = antennaVSWR;
+	}
+	public int getAntennaid() {
+		return antennaid;
+	}
+	public void setAntennaid(int antennaid) {
+		this.antennaid = antennaid;
+	}
+	public String getAntennaName() {
+		return antennaName;
+	}
+	public void setAntennaName(String antennaName) {
+		this.antennaName = antennaName;
+	}
+	public String getProjectName() {
+		return projectLead;
+	}
+	public void setProjectName(String projectName) {
+		this.projectLead = projectName;
+	}
+	public double getAntennaVSWR() {
+		return antennaVSWR;
+	}
+	public void setAntennaVSWR(double antennaVSWR) {
+		this.antennaVSWR = antennaVSWR;
+	}	
+}
+public class antennaProblem {
+
+	public static void main(String[] args) {
+		Scanner scan=new Scanner(System.in);
+        int loopCount=scan.nextInt();scan.nextLine();
+        Antenna[] antennas=new Antenna[loopCount];
+        for(int i=0;i<loopCount;i++) {
+        	int antennaid=scan.nextInt();scan.nextLine();
+        	String antennaname=scan.nextLine();
+        	String projectlead=scan.nextLine();
+        	double antennaVSWR=scan.nextDouble();scan.nextLine();
+        	antennas[i]= new Antenna(antennaid,antennaname,projectlead,antennaVSWR);
+        }
+        String inp=scan.nextLine();
+        double val=scan.nextDouble();
+        scan.close();
+        int returnedantennaid=searchAntennaByName(antennas,inp);
+        if (returnedantennaid==0) 
+        	System.out.println("There is no antenna with given parameter");
+        else
+        	System.out.println(returnedantennaid);  
+        Antenna[] resultobj = sortedAntennaByVSWR(antennas,val);
+        if(resultobj==null)
+        	System.out.println("No Antenna found");
+        else
+        {
+        	for(Antenna antenna:resultobj) {
+        		System.out.println(antenna.projectLead);
+        	}
+        }
+        
+	}
+	
+	public static int searchAntennaByName(Antenna[] antennas,String inp) {
+		return  Arrays.stream(antennas).filter(a->a.antennaName.equalsIgnoreCase(inp))
+//		.parallel()
+		.map(a->a.getAntennaid()).findFirst().get();
+		
+//		for(Antenna antenna:antennas) {
+//			if(antenna.antennaName.equalsIgnoreCase(inp))
+//				return antenna.getAntennaid();
+//		}
+//		return 0;
+	}
+	public static Antenna[] sortedAntennaByVSWR(Antenna[] antennas,double val) {
+		Antenna[] result=new Antenna[0]; 
+		for(Antenna antenna:antennas) {
+			if(antenna.antennaVSWR < val)
+			{
+				result=Arrays.copyOf(result,result.length+1);
+				result[result.length-1]=antenna;
+			}
+		}
+		for(int i=0;i<result.length-1;i++)
+		{
+			for(int j=0;j<result.length-i-1;j++) {
+				if(result[j].antennaVSWR>result[j+1].antennaVSWR) {
+					Antenna temp=result[j];
+					result[j]=result[j+1];
+					result[j+1]=temp;
+				}
+			}
+		}
+		if (result.length>0)
+			return result;
+		return null;
+	}
+
+}
+
+
+
+// // Test Case 1 
+//4
+//111
+//Reconfigurable
+//Hema
+//0.4
+//222
+//Wearable
+//Kavya
+//0.9
+//333
+//Microstrip
+//Teju
+//0.3
+//444
+//Dielectric
+//Sai
+//0.65
+//Microstrip
+//0.5
