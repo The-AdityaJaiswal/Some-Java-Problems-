@@ -1,0 +1,144 @@
+import java.util.Arrays;
+import java.util.Scanner;
+public class footwearProblem {
+	
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int loopCount =sc.nextInt();
+		Footwear[] footwear_objects=new Footwear[loopCount];
+		for(int i=0;i<loopCount;i++) {
+			int inp1=sc.nextInt();sc.nextLine();
+			String inp2=sc.nextLine();
+			String inp3=sc.nextLine();
+			int inp4=sc.nextInt();sc.nextLine();
+			footwear_objects[i] = new Footwear(inp1,inp2,inp3,inp4);
+		}
+		String footweartype=sc.nextLine();
+		String footwearname=sc.nextLine();
+		sc.close();
+		int count = getCountByType(footwear_objects,footweartype);
+		if (count>0)
+			System.out.println(count);
+		else
+			System.out.println("Footwear not available");
+		Footwear priceSecond = getSecondHighestPriceByBrand(footwear_objects,footwearname);
+		if (priceSecond == null)
+			System.out.println("Brand not available");
+		else
+		{
+			System.out.println(priceSecond.footwearId);
+		    System.out.println(priceSecond.footwearName);
+		    System.out.println(priceSecond.price);
+		}
+		
+	}
+   public static int getCountByType(Footwear[] footwear_objects,String footweartype) {
+	   int count = 0;
+	   for(int i=0;i<footwear_objects.length;i++) {
+		   if(footwear_objects[i].footwearType.equalsIgnoreCase(footweartype))
+			   count+=1;
+	   }
+	   return count;
+   }
+   
+   public static Footwear getSecondHighestPriceByBrand(Footwear[] footwear_objects,String footwearname) {
+	   int priceArray[] = new int[0];
+	   for(int i=0;i<footwear_objects.length;i++) {
+		   if(footwear_objects[i].footwearName.equalsIgnoreCase(footwearname)) {			   
+         priceArray=Arrays.copyOf(priceArray,priceArray.length+1);
+         priceArray[priceArray.length-1]=footwear_objects[i].price;
+		  }
+	   }
+//		   System.out.println(footwear_objects[4].price);
+//		   System.out.println(priceArray.length);
+//		   for(int arr:priceArray) {
+//			   System.out.println(arr);
+//		   }
+	   Arrays.sort(priceArray);
+	   if (priceArray.length>1) {
+		   int price=priceArray[priceArray.length-2];
+		   for(int j=0;j<footwear_objects.length;j++) {
+			   if(footwear_objects[j].price == price)
+					return footwear_objects[j];
+			   }
+		   }
+	   
+	   return null;
+   }
+}
+
+class Footwear{
+	int footwearId;
+	String footwearName;
+	String footwearType;
+	int price;
+	
+	public Footwear(int footwearId, String footwearName, String footwearType, int price) {
+		this.footwearId = footwearId;
+		this.footwearName = footwearName;
+		this.footwearType = footwearType;
+		this.price = price;
+		
+//		getter and setter
+		
+	}
+
+	public int getFootwearId() {
+		return footwearId;
+	}
+
+	public void setFootwearId(int footwearId) {
+		this.footwearId = footwearId;
+	}
+
+	public String getFootwearName() {
+		return footwearName;
+	}
+
+	public void setFootwearName(String footwearName) {
+		this.footwearName = footwearName;
+	}
+
+	public String getFootwearType() {
+		return footwearType;
+	}
+
+	public void setFootwearType(String footwearType) {
+		this.footwearType = footwearType;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	}	
+
+
+// // //Test Case 1
+//5
+//100
+//Sketchers
+//sneekers
+//12345
+//103
+//Puma
+//Running shoes
+//10099
+//102
+//reebok
+//Running shoes
+//5667
+//101
+//Reebok
+//running shoes
+//5656
+//99
+//reebok
+//floaters
+//5666
+//running shoes
+//reebok
